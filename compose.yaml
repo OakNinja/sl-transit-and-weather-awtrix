@@ -1,0 +1,7 @@
+services:
+  awtrix-stockholm:
+    build: .
+    container_name: awtrix-stockholm
+    restart: unless-stopped
+    env_file:
+      - .env

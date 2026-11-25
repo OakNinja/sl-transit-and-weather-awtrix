@@ -10,7 +10,7 @@ It uses SMHI's open SNOW forecast and SL's public, keyless SL Transport API. The
 2. Set `AWTRIX_URL` to the base URL of your display (for example `http://awtrixng-a1b2c3.local`).
 3. Run `docker compose up -d --build`.
 
-The service uses SL site ID `9106` for Islandstorget, fetches forecast data for its coordinates, and creates one app named `StockholmDashboard` on AWTRIX. It removes the previous `StockholmWeather` and `SLIslandstorget` apps, then leaves only the dashboard enabled in the display rotation. Other apps are disabled in rotation, not deleted. Pushed apps are stored in memory by AWTRIX and disappear if the display restarts; this service republishes the dashboard on its next poll.
+The service uses SL site ID `9106` for Islandstorget, fetches forecast data for its coordinates, and creates one app named `StockholmDashboard` on AWTRIX. It leaves other apps alone by default. Set `DISABLE_OTHER_APPS=true` to put only this dashboard in the rotation; other apps are disabled, not deleted. Pushed apps are stored in memory by AWTRIX and disappear if the display restarts; this service republishes the dashboard on its next poll.
 
 ## Run without Docker
 
@@ -32,6 +32,7 @@ Running directly on the host is the most reliable option when AWTRIX is on your 
 | Variable | Default | Description |
 | --- | --- | --- |
 | `AWTRIX_URL` | required | Display base URL, without a trailing slash |
+| `DISABLE_OTHER_APPS` | `false` | Set `true` to disable other apps in the display rotation |
 | `POLL_SECONDS` | `60` | Refresh interval; avoid polling the public APIs excessively |
 | `SL_SITE_NAME` | `Islandstorget` | Station name shown in service logs |
 | `SL_SITE_ID` | `9106` | Islandstorget site ID used by SL's departures endpoint |
