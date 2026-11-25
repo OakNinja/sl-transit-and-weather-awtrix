@@ -356,6 +356,8 @@ def main() -> None:
             LOG.info("Updated the Stockholm dashboard card")
         except (HTTPError, URLError, TimeoutError, ValueError, RuntimeError, KeyError) as exc:
             LOG.warning("Update failed: %s", exc)
+        except Exception:
+            LOG.exception("Unexpected dashboard update error; will retry after %ss", poll_seconds)
         time.sleep(poll_seconds)
 
 

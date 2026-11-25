@@ -10,7 +10,7 @@ It uses SMHI's open SNOW forecast and SL's public, keyless SL Transport API. The
 2. Set `AWTRIX_URL` to the base URL of your display (for example `http://awtrixng-a1b2c3.local`).
 3. Run `docker compose up -d --build`.
 
-The service uses SL site ID `9106` for Islandstorget, fetches forecast data for its coordinates, and creates one app named `StockholmDashboard` on AWTRIX. It leaves other apps alone by default. Set `DISABLE_OTHER_APPS=true` to put only this dashboard in the rotation; other apps are disabled, not deleted. Pushed apps are stored in memory by AWTRIX and disappear if the display restarts; this service republishes the dashboard on its next poll.
+The service uses SL site ID `9106` for Islandstorget, fetches forecast data for its coordinates, and creates one app named `StockholmDashboard` on AWTRIX. It leaves other apps alone by default. Set `DISABLE_OTHER_APPS=true` to put only this dashboard in the rotation; other apps are disabled, not deleted. Pushed apps are stored in memory by AWTRIX and disappear if the display restarts; this service republishes the dashboard on its next poll. The container uses `restart: unless-stopped`, so Docker restarts it when the host or Docker daemon comes back. If you use Docker Desktop, enable Docker Desktop to start at login.
 
 ## Run without Docker
 
@@ -25,7 +25,7 @@ python3 app.py
 
 The program uses only the Python standard library.
 
-Running directly on the host is the most reliable option when AWTRIX is on your local network. Docker Desktop may isolate containers from local LAN devices; if the container logs connection errors for the display, use the direct host run above.
+The host running this service must be able to reach both the display and the public SL and SMHI endpoints. If Docker reports connection errors for a LAN display, use the direct host run above.
 
 ## Configuration
 
@@ -58,6 +58,7 @@ This repository is the Python/Docker version and needs a computer or server on t
 ## Troubleshooting
 
 - Check `docker compose logs -f` for API or display errors.
+- The service logs unexpected errors and retries on its next polling interval.
 - Confirm the display is reachable from the machine running the service.
 - If no train appears, check the raw SL departure destination names and set `SL_CITYBOUND_DESTINATIONS` to match. The filter accepts green metro lines 17, 18, and 19 by default.
 - If a weather field is unavailable, the card reports that forecast data is unavailable rather than inventing a value.
